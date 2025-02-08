@@ -9,6 +9,7 @@ In this assignment, we will be working with a dataset containing information abo
 You will need to load the tidyverse library
 
 ```{r}
+library(tidyverse)
 ```
 
 Then you'll load the data from the web. The URL for the data is: https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/biden_wh_salaries_2024.csv. You will create a dataframe called `wh_salaries` that contains the data from this URL.
@@ -16,32 +17,37 @@ Then you'll load the data from the web. The URL for the data is: https://raw.git
 ### Task 2: Load the Data and Describe It
 
 ```{r}
+wh_salaries <- read_csv ("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/biden_wh_salaries_2024.csv")
 ```
 ### Task 3: Describe the Data
 
 You should examine that dataframe carefully by clicking on it in the Environment tab in RStudio. Write a couple of sentences describing the categories of incidents. From a reporting standpoint, what stands out to you about this data? Are there any salary values that will cause problems for analysis?
 
 ANSWER HERE
+Well I don't have much context on what these salaries mean, but the highest ones were associate counsel and the lowest ones were senior directors or policy advisors. A lot of assistant to the president jobs are grouped up at a salary much higher than I'd expect (180,000). Sorting by job titles showed me that different job titles represent different levels of salary: associate (70,050), chief of staff (88,500), director (110,500) deputy assistant (155,000), and deputy director (88,500). It's interesting to see the like hierarchy of salary dependant entirely on what title you have in the ladder.
 
 ### Task 4: Calculate the Mean and Median of the Salaries
 
 Write code to calculate the mean and median of the salaries in the dataset using the `summarize()` function. You don't need to make a new dataframe, just display the results.
 
 ```{r}
-
+mean_salary <- wh_salaries |> summarize(mean= mean(salary))
+median_salary <- wh_salaries |> summarize(median= median(salary))
 ```
-
+mean = 107,036.6 median = 110,050
 ### Task 5: Add in the minimum and maximum salaries
 
 Take the code you just wrote and add in the minimum and maximum salaries (the functions for that are `min()` and `max()`). Your results should show four columns: mean_salary, median_salary, min_salary, max_salary.
 
 ```{r}
-
+min_salary <- wh_salaries |> summarize(min= min(salary))
+max_salary <- wh_salaries |> summarize(max= max(salary))
 ```
-
+min = 0 max = 251,258
 ### Task 6: Describe the Results
 
 Write a couple of sentences describing the results of your analysis. What do the mean and median salaries tell you about the data? What do the minimum and maximum salaries tell you? Are there any outliers in the data?
+Mean and median salaries are pretty close to each other in value, which means that most people working at the White House make 6 figures. Sweet deal. If the mean was low and the median was high it would mean that higher up positions get most of the pay while the majority of workers make less, but that's not the case here. The minimum salary tells me there's volunteer work / intern work and the max is twice the median which kind of renounces my point a few sentences ago about people having similar pay. Uh yeah those would be the outliers I feel like since I think 11/564 people don't get paid and 1/564 people get paid the max. 
 
 ANSWER HERE
 
@@ -50,3 +56,4 @@ ANSWER HERE
 Based on the data, what is your best story idea? What is the next step you would take to develop that story idea?
 
 ANSWER HERE
+Best story idea is probably asking why 1/564 people get paid double the median pay. I think I'd HAVE to interview Michelle Barrans cause they're clearly doing something really significant as an associate counsel who gets paid more than other associate counsel members. Then I'd want to interview other members and then just other employees, maybe senior deputy associates who get paid the median and see their thoughts on the salary pyramid going on. 
