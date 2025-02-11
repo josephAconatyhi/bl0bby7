@@ -5,10 +5,18 @@ title: "Crime Rates"
 Follow along with the demo to learn how to calculate crime rates using R and the Tidyverse. We'll also introduce a new library, janitor, which helps make column names easier to work with. You should get started by loading the tidyverse in a new R block, then install and load janitor.
 
 ### Task 1: Load the tidyverse and install and load janitor
+```{r}
+library(tidyverse)
+install.packages("janitor")
+library(janitor)
+```
 
 
 
 ### Task 2: Load the crime dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_annual_crime.csv
+```{r}
+crime_data <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_annual_crime.csv") |> clean_names()
+```
 
 
 
@@ -17,17 +25,24 @@ Follow along with the demo to learn how to calculate crime rates using R and the
 
 
 ### Task 4: Calculate the total crime rate for each year (picking our unit!)
+```{r}
+crime_data |> mutate(total_rate = grand_total/population * 10000)
+```
 
 
 
 ### Task 5: Calculate the violent and property crime rates for each year (same unit)
+```{r}
+crime_data |> mutate(violent_rate = violent_crime_total/population * 10000)
+crime_data |> mutate(property_rate = property_crime_total/population * 10000)
+```
 
 
 
 ### Task 6: Describe our results
 
 Write a few sentences about what you found in the data. What years had the highest crime rates? What years had the lowest crime rates? Does the pattern match your expectations?
-
+Like what we said in class a little bit, the data is encouraging but also can have holes in it. Narratives in media create a perception easy to adopt that the world is getting worse and bad things are happening more because that's one way to keep people on their phones, but it looks like violent crime and property crime rates were lower than it has been in recent years. But like we said there are caveats to this data, like what % of the population isn't reporting crimes that are happening and how much would that change the data currently. It's complicated because we don't have a tangible way to express this but it is a very real problem. Property crime was SO high in the 70s and 80s. Jesus bro. 
 
 
 
