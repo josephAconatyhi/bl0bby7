@@ -62,3 +62,20 @@ Although some cities in Maryland like Edmonston and Poolseville have had 800% an
 ### Task 9: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
+
+### Task 10: Take the violent crime rates for 2020 and do three things:
+
+Using the 2020 violent crime rate, calculate the percentiles using `ntile()`. Save the results to a new dataframe called `md_cities_percentiles`. How many cities are above the 90th percentile?
+```{r}
+md_cities_percentiles <- md_cities_rates |> mutate(percentil = ntile(violent_rate_2020, 100))
+```
+10 cities were above the 90th percentile. OC at the 100%, dang man...
+
+Calculate the Interquartile Range of the 2020 violent crime rate using `summarize()` and R's `IQR()` function. The syntax is similar to how `mean()` works.
+```{r}
+interquartile_violent_2020 <- md_cities_rates |> summarize(IQR= IQR(violent_rate_2020))
+```
+
+
+Do the results change your best story idea from the previous assignment? Why or why not?
+I guess my angle should've went the other way or maybe that crime went up a fair bit. I don't know what the heck interquartile range is but if that's the median for all of those cities then my angle on crime going down was def wrong.
