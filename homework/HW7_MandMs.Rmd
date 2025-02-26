@@ -5,27 +5,49 @@ title: "HW7_MandMs"
 In this assignment, you'll be picking up where you left off with the M&Ms activity. You'll load the data and perform some basic statistical analysis. Follow the steps below to complete the assignment.
 
 ### Task 1: Load the tidyverse
+```{r}
+library(tidyverse)
+```
 
 
 ### Task 2: Load the M&Ms dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv
+```{r}
+MandMs <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv")
+```
 
 
-### Task 3: Sample 5 rows of data from the dataset
+### Task 3: Sample 5 rows of data from the dataset, and then sample 10 rows, saving each to separate dataframes called sample5 and sample10.
+```{r}
+sample_5 <- MandMs |> 
+  sample_n(5)
+sample_10 <- MandMs |> 
+  sample_n(10)
+```
 
 
-### Task 4: Calculate the mean age and standard deviation of the sample, using either the blue or white number of M&Ms
+### Task 4: Calculate the mean and standard deviation of the samples, using one of the colors.
+```{r}
+sample_5 |> summarize(mean= mean(red), sd = sd(red))
+sample_10 |> summarize(mean= mean(red), sd = sd(red))
+```
 
 
-### Task 5: Calculate the mean age and standard deviation of the population, using the same measure as in Task 4
+### Task 5: Calculate the mean and standard deviation of the population, using the same color as Task 4
+```{r}
+sample_5 |> summarize(mean= mean(total), sd = sd(total))
+sample_10 |> summarize(mean= mean(total), sd = sd(total))
+```
 
 
 ### Task 6: Compare the sample and population statistics
 
-Compare the two sets of means and standard deviations. Are they similar?
+Compare the three sets of means and standard deviations. Are they similar?
+For sample 5 and 10, the mean of reds went down substantially as did the SD. For the total MandMs, the mean went down significantly but the SD actually was pretty similar.
 
 ### Task 7: Describe the results
 
 Write a few sentences about what you found in the data. What does this tell you about the M&Ms dataset and about the act of random sampling?
 
+Sample size like we talked about in class today makes / breaks sampling accuracy. Could 5 MandM results really speak for 1000? Not exactly, but 10 results was better for sure. Seeing the decline from an 82 mean versus a 68 mean to a lesser extent illustrates how sample size can skew accuracy of data. It is 5 AM I don't know if this is true. but it seems correct.
 
 When finished, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
