@@ -1,0 +1,24 @@
+---
+title: "final_project"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+getwd()
+```
+
+Downloaded CSV file and imported it to RStudio called "maryland.csv" which has data from 2019 - 2023. Data has Maryland averaging 535 fatal crashes a year. For non fatal crashes, Maryland averages 107,886 a year. I saw that you recommended I ground the data in adult years. A good idea, but the CSV from the Maryland Dept of Transportation only includes ages in the context of Statewide Drivers, not in the context of crashes fatal/nonfatal. 
+
+Will now access statewide numbers for the rest of the nation and write out some comparisons. A question just arose in my head perhaps for the assignment later, something worth writing now: If I have the file locally and its imported, how can I access specific parts of the table to display on RStudio? I feel like we've done that in class multiple times but I don't remember.
+
+
+Ok running into some issues currently with accessing the national data. First and foremost, just looking at the CSVs from the Fatality Analysis Reporting System I am getting very lost. I am looking at the 2023 NationalAuxilaryCSV.zip file. And it appears to have less content than the FARS2023NationalCSV file within the 2023 folder. Some troubles right now are the following:
+
+Cannot understand what the data means when accessing AuxillaryCSV (ex: States are categorized as numbers and isolated incidents are individually described rather than summarized data for each state within the CSV file), cannot import CSV zip files currently to RStudio. Plenty of questions to ask though, always good to have that. 
+
+More notes! Figured out how to add a file from the 2023 data called acc_aux. It still doesn't make sense to me what to do with the data or if I should summarize it / mutate it with code. Will see if I can attach a zip file now; results pending.
+
+It worked! I have attached the FARS2023NationalAuxilaryCSV file into the project. Unfortunately the data still feels somewhat cryptic, I potentially must find another source of data on national crashes.
+
+Questions that remain now; Where can I find national data on fatal and non fatal crashes? And within this data where can I find ages of drivers in these crashes? I have found maryland data for fatal and non fatal crashes annually which is quite helpful. But for me to have proper perspective on how we compare to the national average of car crashes each year, I must find out where the rest of the country stands. 
