@@ -1,3 +1,12 @@
+Tests to run: 
+Based on what we've learned so far, some tests I could run with the data are: 
+Chi square test - needed a refresher on it so I googled chi square test and it said you use this for big data sets
+ANOVA - googled this too, it looks like a comparison test between groups, which could be beneficial if I'm doing state to state comparisons to Maryland after finding which states have the highest vs lowest rates of car accidents annually
+Z score - Not really sure if this could be incorporated into my thing, but I like the idea of comparing Maryland's annual car accidents to mean or "normal" annual car accidents. Not sure about this one 
+Significance test - Very unsure about this one but wanted to include just in case it could work with this project. Not sure how I would begin to set up a significance test with data and I don't want to make something out of nothing with a p value like we've seen people do with statistics before. I guess maybe if I were to include it, it would look like car crashes in Maryland versus car crashes in the rest of the nation and if the value was much higher or much lower than average crashes that would show in the p value? I think. But the first three I am sure I'd like to use if I can figure out how. 
+
+
+
 ---
 title: "final_project"
 output: html_document
