@@ -1,3 +1,71 @@
+```{r}
+library(vcd)
+```
+
+```{r}
+maryland_data <- data.frame(
+  Years = c(2019, 2020, 2021, 2022, 2023),
+  Fatal_Crashes = c(496, 546, 524, 534, 577), 
+  Injury_Crashes = c(32938, 25360, 28142, 28027, 28577),
+  Total_Crashes = c(116017, 95634, 108909, 108469, 110401)
+)
+```
+```{r}
+chisq_result <- chisq.test(maryland_data$Total_Crashes, p = maryland_data$)
+chisq_result
+```
+got an error message with this entry. "Error in chisq.test(maryland_data$Total_Crashes, p = maryland_data$Years) : 
+  probabilities must sum to 1."
+
+Trying again.
+```{r}
+chisq_result <- chisq.test(maryland_data$Total_Crashes, p = maryland_data$Fatal_Crashes)
+chisq_result
+```
+same error message as previous. Beginning to think chi squared isn't relevant to my project. will try ANOVA
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+```
+
+```{r}
+anova_result <- aov(maryland_data ~ Fatal_Crashes)
+summary(anova_result)
+```
+Error message on this one: "Error in eval(predvars, data, env) : object 'Fatal_Crashes' not found"
+
+Alright that didn't work really, gonna see if I can incorporate Z scores. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)  # For data manipulation and visualization
+library(knitr)      # For nice tables
+library(lubridate)  # For working with dates
+```
+
+
+```{r}
+maryland_data <- maryland_data |> 
+  mutate(
+    mean_crashes = mean(Total_Crashes),
+    sd_crashes = sd(Total_Crashes),
+    z_score = (Total_Crashes - mean_crashes) / sd_crashes
+  )
+maryland_data |> 
+  select (Years, Total_crashes, z_score) |> 
+  head(10) |> 
+  kable(digits = 2)
+```
+error message for this one: 
+Error in `select()`:
+! Can't select columns that don't exist.
+✖ Column `Total_crashes` doesn't exist.
+
+Sorry I submitted this late we had to wsee the Accountant 2 in theaters. I think I will need to adjust what tests to run with this data and also find new data.
+
+
+
+
 Tests to run: 
 Based on what we've learned so far, some tests I could run with the data are: 
 Chi square test - needed a refresher on it so I googled chi square test and it said you use this for big data sets
