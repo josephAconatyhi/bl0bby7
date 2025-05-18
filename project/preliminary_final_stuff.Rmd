@@ -1,0 +1,101 @@
+```{r}
+library(vcd)
+```
+
+```{r}
+maryland_data <- data.frame(
+  Years = c(2019, 2020, 2021, 2022, 2023),
+  Fatal_Crashes = c(496, 546, 524, 534, 577), 
+  Injury_Crashes = c(32938, 25360, 28142, 28027, 28577),
+  Total_Crashes = c(116017, 95634, 108909, 108469, 110401)
+)
+```
+```{r}
+chisq_result <- chisq.test(maryland_data$Total_Crashes, p = maryland_data$)
+chisq_result
+```
+got an error message with this entry. "Error in chisq.test(maryland_data$Total_Crashes, p = maryland_data$Years) : 
+  probabilities must sum to 1."
+
+Trying again.
+```{r}
+chisq_result <- chisq.test(maryland_data$Total_Crashes, p = maryland_data$Fatal_Crashes)
+chisq_result
+```
+same error message as previous. Beginning to think chi squared isn't relevant to my project. will try ANOVA
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+```
+
+```{r}
+anova_result <- aov(maryland_data ~ Fatal_Crashes)
+summary(anova_result)
+```
+Error message on this one: "Error in eval(predvars, data, env) : object 'Fatal_Crashes' not found"
+
+Alright that didn't work really, gonna see if I can incorporate Z scores. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)  # For data manipulation and visualization
+library(knitr)      # For nice tables
+library(lubridate)  # For working with dates
+```
+
+
+```{r}
+maryland_data <- maryland_data |> 
+  mutate(
+    mean_crashes = mean(Total_Crashes),
+    sd_crashes = sd(Total_Crashes),
+    z_score = (Total_Crashes - mean_crashes) / sd_crashes
+  )
+maryland_data |> 
+  select (Years, Total_crashes, z_score) |> 
+  head(10) |> 
+  kable(digits = 2)
+```
+error message for this one: 
+Error in `select()`:
+! Can't select columns that don't exist.
+✖ Column `Total_crashes` doesn't exist.
+
+Sorry I submitted this late we had to wsee the Accountant 2 in theaters. I think I will need to adjust what tests to run with this data and also find new data.
+
+
+
+
+Tests to run: 
+Based on what we've learned so far, some tests I could run with the data are: 
+Chi square test - needed a refresher on it so I googled chi square test and it said you use this for big data sets
+ANOVA - googled this too, it looks like a comparison test between groups, which could be beneficial if I'm doing state to state comparisons to Maryland after finding which states have the highest vs lowest rates of car accidents annually
+Z score - Not really sure if this could be incorporated into my thing, but I like the idea of comparing Maryland's annual car accidents to mean or "normal" annual car accidents. Not sure about this one 
+Significance test - Very unsure about this one but wanted to include just in case it could work with this project. Not sure how I would begin to set up a significance test with data and I don't want to make something out of nothing with a p value like we've seen people do with statistics before. I guess maybe if I were to include it, it would look like car crashes in Maryland versus car crashes in the rest of the nation and if the value was much higher or much lower than average crashes that would show in the p value? I think. But the first three I am sure I'd like to use if I can figure out how. 
+
+
+
+---
+title: "final_project"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+getwd()
+```
+
+Downloaded CSV file and imported it to RStudio called "maryland.csv" which has data from 2019 - 2023. Data has Maryland averaging 535 fatal crashes a year. For non fatal crashes, Maryland averages 107,886 a year. I saw that you recommended I ground the data in adult years. A good idea, but the CSV from the Maryland Dept of Transportation only includes ages in the context of Statewide Drivers, not in the context of crashes fatal/nonfatal. 
+
+Will now access statewide numbers for the rest of the nation and write out some comparisons. A question just arose in my head perhaps for the assignment later, something worth writing now: If I have the file locally and its imported, how can I access specific parts of the table to display on RStudio? I feel like we've done that in class multiple times but I don't remember.
+
+
+Ok running into some issues currently with accessing the national data. First and foremost, just looking at the CSVs from the Fatality Analysis Reporting System I am getting very lost. I am looking at the 2023 NationalAuxilaryCSV.zip file. And it appears to have less content than the FARS2023NationalCSV file within the 2023 folder. Some troubles right now are the following:
+
+Cannot understand what the data means when accessing AuxillaryCSV (ex: States are categorized as numbers and isolated incidents are individually described rather than summarized data for each state within the CSV file), cannot import CSV zip files currently to RStudio. Plenty of questions to ask though, always good to have that. 
+
+More notes! Figured out how to add a file from the 2023 data called acc_aux. It still doesn't make sense to me what to do with the data or if I should summarize it / mutate it with code. Will see if I can attach a zip file now; results pending.
+
+It worked! I have attached the FARS2023NationalAuxilaryCSV file into the project. Unfortunately the data still feels somewhat cryptic, I potentially must find another source of data on national crashes.
+
+Questions that remain now; Where can I find national data on fatal and non fatal crashes? And within this data where can I find ages of drivers in these crashes? I have found maryland data for fatal and non fatal crashes annually which is quite helpful. But for me to have proper perspective on how we compare to the national average of car crashes each year, I must find out where the rest of the country stands. 
