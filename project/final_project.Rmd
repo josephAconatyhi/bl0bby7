@@ -9,7 +9,77 @@ Maryland drivers have a bad reputation. Whether it comes up from Marylanders or 
 ```{r}
 library(tidyverse)
 library(corrplot)
+library(lubridate)
 ```
 
+Alright, first we will establish a baseline for what Maryland data looks like each year regarding car incidents. Car "incidents" as described by ZeroDeathsMD includes deaths, physical injuries, and property damage. I imported a file called "zera.csv" which has this data on it, and I will use some functions to average it out real quick.
+
+```{r}
+zera |> summarize(mean= mean(Fatal), sd = sd(Fatal))
+```
+Alright, from doing this I found that on average 535 people die from driving incidents in Maryland every year according to this data varying by roughly 30 deaths plus or minus the 535. I want to start with this so we have a relative understanding that Yes, "maryland drivers" is out the gate a real problem that affects real people and not just some fun expression about some dumb driver on the freeway. This is real and it's a problem we as a local society and as society in general shouldn't downplay. 
+
+#  National Data
+
+Let's bring this problem to the national level. To really figure out how good or bad Maryland is in terms of driving, we need to compare our data to the highest and lowest fatalities in the US. Gonna import "fatalitiesUS.csv" which is all 50 states and their reported driving fatalities in 2022. 
+
+```{r}
+min_max <- fatalitiesUS |>
+  summarise(
+    min= min(Fatalities),
+    max= max(Fatalities)
+  )
+```
+
+Ok, creating the min_max table showed me that the minimum is 52 fatalities, which when cross referenced with "fatalitiesUS.csv" is Rhode Island and the maximum is 4,428 in California, with Texas at a close 2nd with 4,402 fatalities just in one year. How much was Maryland at that year? 564. But these numbers are honestly fairly misleading without additional support. If you saw these numbers raw just like this, you might assume maybe it's much worse in the rest of the country. I got bad news for you...
+
+#  Driving improvement and Incident Rates 
+I used a ranking of national driving improvement by the state during 2018 - 2022 to find where we stand compared to the rest of the US in terms of driving improvement over time. I've imported the file "davidlynch.csv" which has this data. A score of 50 is the maximum best and 0 is the maximum worst a state can get. I will display Maryland's score over time (although my axis for time is a little messed up within the graph) compared to the highest and lowest improvement rating states in the US which are: Arizona at most improved up 41 rating and Michigan at least improved down 39 rating.
+```{r}
+ggplot(davidlynch, aes(x = `filler column`, y = Maryland )) +
+  geom_line(aes(y= Maryland), color = "blue", size = 3) +
+  geom_line(aes(y= Arizona), color = "red", size = 1) +
+  geom_line(aes(y= Michigan), color = "yellow", size = 1)+
+  theme_classic() +
+  labs(title = "Maryland Driver Improvement Over Time",
+       x = "Years",
+       y = "Rating")
+```
+
+As we can see, although Maryland (in blue) isn't necessarily worst of the worst when it comes to driving improvement, we are in fact getting worse over time. According to this data, we are 41st in the US for driving improvement which puts us at 9th worst in the country. 
+
+# Finding our why
+In an attempt to statistically figure out WHY drivers in certain states are worse or better than others, I found national data that uses the metric of ___ per 1,000 drivers to rank the states. I imported "hoursinsilence.csv" which has three different factors - incidents, DUIs, and speeding incidents per 1,000 drivers. Let's test these factors for significance and correlation and see what we find. 
+
+```{r}
+hoursinsilence |> summarize(correlation =cor(Incidentsp1000, Speedp1000))
+hoursinsilence |> summarize(correlation =cor(Incidentsp1000, DUIp1000))
+```
+
+Results for correlation between incident rate and speed: very low. The correlation was 7%  which is definitely negligible. 
+HOWEVER, DUI correlation to incidents is ~65% which is BOOM a factor. So what I gather from this is that there isn't really a clear relationship between bad drivers in specific states and speeding, probably because speeding happens practically everywhere. But DUIs happens a lot more and there are clear repercussions to doing so as incident rates can sometimes increase as DUI rate goes up. Let's try some significance testing. 
+
+```{r}
+model <- lm(`Incidentsp1000` ~ `Speedp1000` + `DUIp1000`, data = hoursinsilence)
+summary(model)
+```
+
+Alright, looking at multiple R squared which is 0.42 or 42%, it looks like there's something goin on between speed, dui, and how they relate to incidents. The min max of 27.9 and -15.7 kind of indicate the relationship displayed in the data is kind of shaky according to this model, and the low p value of 2.436e-06 adds to that there is some statistical significance between DUI and speeding rates and incidents. 
+
+#  Conclusion and segway to pitch
+To wrap things up, we found that Maryland drivers ARE pretty bad at driving when compared to the rest of the nation. We used statistical significance, correlation, mean and standard deviation, and a line graph to display how we got to this conclusion that Maryland is pretty bad at driving. Now what?
+
+Now, we provide actionable steps in the way of a story pitch. Pitch idea: Maryland drivers wouldn't be so bad if we enforced speeding and DUI laws better. 
+
+What I previously did wrong when covering this sort of story is try to get at less tangible things like the MDOT driving programs and schools and how they could be improved, but where real change happens is in legislation.
+
+#  Pitch 
+Here's the idea; since statistics say that there is a decently strong correlation and significance between DUIs and speeding incidents with driving incidents, this means that people aren't as afraid to break those laws and bend the rules. Driving while under the influence and speeding aren't just self inflicting actions though. 
+
+What we need to emphasize more not just in law but in reporting is that when you speed or drink and drive, you put hundreds of people all around you at risk. Not just you. Putting these actions into perspective is what would ground the story in something tangible, something real.
+
+I'd first talk to people who made the data that I'm using so I make sure I'm using it right. Then I would talk to local legislators (specifically Greenbelt because I have a little background with them) on where they believe driving laws fall short and need to be improved in the area. When other lawmakers see their answers in local and state newspapers, this will put them in a position to reflect on the same issue and see if they also need to improve their laws and driving culture. I would emphasize that Maryland hasn't improved at driving in years and has only gotten worse over time, and that we aren't that far off from the worst drivers in North America. 
+
+Just knowing that that's the case might also help people internalize that individual action and being the driver they want to see is the best thing they can do outside of talk about these issues on platforms where people can listen. Some gaps right now are that I didn't go deep enough into correlation and other factors that may affect incidents per 1,000 people. I need to look into that more if this is gonna be an actual story. But this is basically my plan if it was.
 
 
